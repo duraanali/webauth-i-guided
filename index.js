@@ -4,8 +4,10 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
+
 const db = require('./database/dbConfig.js');
 const Users = require('./users/users-model.js');
+const restricted = require('./auth/restricted');
 
 const server = express();
 
@@ -46,7 +48,7 @@ server.post('/api/login', (req, res) => {
     });
 });
 
-server.get('/api/users', (req, res) => {
+server.get('/api/users', restricted, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
